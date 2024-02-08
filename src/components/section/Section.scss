@@ -1,0 +1,6 @@
+@import "src/styles/components/container";
+
+.section:not(:last-child){
+    @include container-attributes;
+    margin-right: 4vh;
+}

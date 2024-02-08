@@ -1,0 +1,25 @@
+@mixin flex {
+  display: flex;
+}
+
+@mixin stretched-w {
+  width: 100%;
+}
+
+@mixin stretched-h {
+  height: 100%;
+}
+
+@mixin stretched {
+  @include stretched-h;
+  @include stretched-w;
+}
+
+@mixin container-attributes {
+  @include flex;
+  @include stretched;
+}
+
+.container {
+  @include container-attributes;
+}

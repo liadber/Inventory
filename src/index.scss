@@ -1,4 +1,17 @@
+@import "styles/components/container";
+
+html{
+  @include container-attributes;
+}
+
+#root{
+  @include flex;
+  @include stretched-w;
+  padding: 4vh;
+}
+
 body {
+  @include container-attributes;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

@@ -1,13 +1,27 @@
 import React from 'react';
-import './App.css';
-import AppSection from "./components/app-section";
+import EnhancedTable from "./components/table/Table";
+import "./App.scss";
+import Section from "./components/section/Section";
 
 function App() {
-  return (
-    <div className="App">
-      <AppSection headerTitle="Navigation"></AppSection>
-    </div>
-  );
+
+    return (
+        <>
+            <Section>
+                <EnhancedTable></EnhancedTable>
+            </Section>
+            <Section className='app-section'>
+                <EnhancedTable></EnhancedTable>
+            </Section>
+            {/*<Grid item>*/}
+            {/*    <EnhancedTable></EnhancedTable>*/}
+            {/*</Grid>*/}
+            {/*<Grid item>*/}
+            {/*    <EnhancedTable></EnhancedTable>*/}
+            {/*</Grid>*/}
+            {/*<PermanentDrawerLeft></PermanentDrawerLeft>*/}
+        </>
+    );
 }
 
 export default App;
