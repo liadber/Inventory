@@ -1,5 +1,5 @@
 import express from 'express';
-import { Pool } from 'pg';
+import {Pool} from 'pg';
 import cors from 'cors';
 
 const pool = new Pool({
@@ -20,23 +20,22 @@ app.use(cors());
 app.get('/products/statistics', async (req, res) => {
     try {
         const query = 'SELECT type, COUNT(*) as quantity FROM product GROUP BY type ORDER BY type';
-        const { rows } = await pool.query(query);
+        const {rows} = await pool.query(query);
         res.json(rows);
     } catch (error) {
         console.error('Error executing query', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({error: 'Internal server error'});
     }
 });
 
 // List products by type
 app.get('/product/:type', async (req, res) => {
-    const { type } = req.params;
-    const { sort, page, filters } = req.query;
+    const {type} = req.params;
+    const {sort, page, filters} = req.query;
 
     // Construct SQL query based on parameters
-    let query = `SELECT * FROM product WHERE type = $1`;
+    let query = `SELECT * FROM product JOIN ${type} ON product.id = ${type}.id`;
 
-    const params = [type];
 
     // Add sorting logic
     if (sort) {
@@ -57,12 +56,13 @@ app.get('/product/:type', async (req, res) => {
         // Implement filtering based on filters object
     }
 
+    console.log("logger: " + query);
     try {
-        const { rows } = await pool.query(query, params);
+        const {rows} = await pool.query(query);
         res.json(rows);
     } catch (error) {
         console.error('Error executing query', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({error: 'Internal server error'});
     }
 });
 
@@ -73,7 +73,7 @@ app.get('/product/filter-values', async (req, res) => {
         res.json({});
     } catch (error) {
         console.error('Error executing query', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({error: 'Internal server error'});
     }
 });
 
