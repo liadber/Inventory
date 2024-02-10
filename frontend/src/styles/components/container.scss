@@ -23,3 +23,8 @@
 .container {
   @include container-attributes;
 }
+
+.scrollable-container {
+  max-height: 300px; /* Set a maximum height to enable scrolling */
+  overflow-y: auto; /* Enable vertical scroll */
+}

@@ -4,12 +4,6 @@ html{
   @include container-attributes;
 }
 
-#root{
-  @include flex;
-  @include stretched-w;
-  padding: 4vh;
-}
-
 body {
   @include container-attributes;
   margin: 0;
@@ -18,6 +12,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root{
+  @include flex;
+  @include stretched-w;
+  padding: 4vh;
 }
 
 code {
