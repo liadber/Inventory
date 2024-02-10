@@ -17,9 +17,9 @@ app.use(express.json());
 app.use(cors());
 
 // Get product statistics
-app.get('/product/statistics', async (req, res) => {
+app.get('/products/statistics', async (req, res) => {
     try {
-        const query = 'SELECT type, COUNT(*) as quantity FROM products GROUP BY type';
+        const query = 'SELECT type, COUNT(*) as quantity FROM product GROUP BY type ORDER BY type';
         const { rows } = await pool.query(query);
         res.json(rows);
     } catch (error) {
