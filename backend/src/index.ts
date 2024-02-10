@@ -34,7 +34,8 @@ app.get('/product/:type', async (req, res) => {
     const { sort, page, filters } = req.query;
 
     // Construct SQL query based on parameters
-    let query = `SELECT * FROM products WHERE type = $1`;
+    let query = `SELECT * FROM product WHERE type = $1`;
+
     const params = [type];
 
     // Add sorting logic
