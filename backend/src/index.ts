@@ -56,7 +56,6 @@ app.get('/product/:type', async (req, res) => {
         // Implement filtering based on filters object
     }
 
-    console.log("logger: " + query);
     try {
         const {rows} = await pool.query(query);
         res.json(rows);
