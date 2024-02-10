@@ -5,6 +5,7 @@ import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import Table from "./components/table/Table";
 import ProductsTypesContainer from "./containers/products-types-container/ProductsTypesContainer";
 import axios from 'axios';
+import ProductsContainer from "./containers/products-container/ProductsContainer";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
                 <ProductsTypesContainer></ProductsTypesContainer>
             </Section>
             <Section bigger={true}>
-                <Table rows={rows} columns={columns}></Table>
+                <ProductsContainer></ProductsContainer>
             </Section>
         </>
     );
