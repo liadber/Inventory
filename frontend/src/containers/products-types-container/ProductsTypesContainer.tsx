@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import SelectableList from "../../components/list/SelectableList";
+import axios from 'axios';
 
 export default function ProductsTypesContainer() {
     const [currentType, setCurrentType] = useState(null);
@@ -7,12 +8,10 @@ export default function ProductsTypesContainer() {
 
     useEffect(() => {
         // Fetch product statistics
-        fetch('http://localhost:8000/product/statistics')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                console.log("disco!");
-                setProductStatistics(data);
+        axios.get('/products/statistics')
+            .then(response => {
+                console.log(response.data);
+                setProductStatistics(response.data);
             })
             .catch(error => {
                 console.error('Error fetching product statistics:', error);

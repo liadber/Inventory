@@ -4,9 +4,11 @@ import Section from "./components/section/Section";
 import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import Table from "./components/table/Table";
 import ProductsTypesContainer from "./containers/products-types-container/ProductsTypesContainer";
-
+import axios from 'axios';
 
 function App() {
+
+    axios.defaults.baseURL = 'http://localhost:8000';
 
     const rows: GridRowsProp = [
         {id: 1, col1: 'Hello', col2: 'World'},
