@@ -1,9 +1,9 @@
 import React from 'react';
 import "./App.scss";
 import Section from "./components/section/Section";
-import SelectableList from "./components/list/SelectableList";
 import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import Table from "./components/table/Table";
+import ProductsTypesContainer from "./containers/products-types-container/ProductsTypesContainer";
 
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
     const rows: GridRowsProp = [
         {id: 1, col1: 'Hello', col2: 'World'},
         {id: 2, col1: 'DataGridPro', col2: 'is Awesome'},
-        {id: 3, col1: 'MUI', col2: 'is Amazing'}    ];
+        {id: 3, col1: 'MUI', col2: 'is Amazing'}];
     const columns: GridColDef[] = [
         {
             field: 'col1',
@@ -26,7 +26,7 @@ function App() {
     return (
         <>
             <Section>
-                <SelectableList listItems={Array(150).fill("books (4)")}></SelectableList>
+                <ProductsTypesContainer></ProductsTypesContainer>
             </Section>
             <Section bigger={true}>
                 <Table rows={rows} columns={columns}></Table>

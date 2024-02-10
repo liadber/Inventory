@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import {List, ListItemButton} from "@mui/material";
 
 interface SelectableListProps {
-    listItems: string[],
+    listItems: {id: string, label: string}[],
     onSelect?: (id: number) => void
 }
 
@@ -22,8 +22,9 @@ export default function SelectableList(props: SelectableListProps) {
         <Box sx={{width: '100%', overflowY: 'scroll'}}>
             <List component="nav">
                 {
-                    listItems.map((label, index) =>
+                    listItems.map(({id, label}, index) =>
                         <ListItemButton
+                            key={id}
                             selected={selectedIndex === index}
                             onClick={(event) => handleListItemClick(event, index)}
                             sx={{ whiteSpace: 'nowrap'}}
