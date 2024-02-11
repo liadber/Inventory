@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import SelectableList from "../../components/list/SelectableList";
+import SelectableList from "../../components/SelectableList";
 import axios from 'axios';
 
 export default function ProductsTypesContainer() {
