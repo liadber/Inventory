@@ -1,6 +1,6 @@
 import {createContext, Dispatch, useContext, useReducer} from 'react';
 
-export const CurrentProductTypeContext = createContext<string | null>(null);
+export const CurrentProductTypeContext = createContext<{ type: string, quantity: number } | null>(null);
 export const CurrentProductTypeDispatchContext = createContext<Dispatch<any> | null>(null);
 
 export function CurrentProductTypeContextProvider({children}: any) {
@@ -18,11 +18,10 @@ export function CurrentProductTypeContextProvider({children}: any) {
     );
 }
 
-function currentProductTypeReducer(currentType: string, action: { type: string, nextProductType: string }) {
+function currentProductTypeReducer(currentType: { type: string, quantity: number }, action: { type: string, nextProductType: { type: string, quantity: number } }) {
     switch (action.type) {
         case 'changed': {
-            console.log(action.nextProductType);
-            return action.nextProductType
+            return {...action.nextProductType}
         }
         default: {
             throw Error('Unknown action: ' + action.type);
@@ -30,7 +29,7 @@ function currentProductTypeReducer(currentType: string, action: { type: string, 
     }
 }
 
-const initialCurrentProductType = "";
+const initialCurrentProductType: { type: string, quantity: number } = { type: '', quantity: 0 };
 
 export function useCurrentProductType() {
     return useContext(CurrentProductTypeContext);

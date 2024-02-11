@@ -47,7 +47,7 @@ app.get('/product/:type', async (req, res) => {
     // Add pagination logic
     if (page) {
         // @ts-ignore
-        const offset = (page - 1) * 10; // Assuming page size of 10
+        const offset = (page) * 10; // Assuming page size of 10
         query += ` OFFSET ${offset} LIMIT 10`;
     }
 
