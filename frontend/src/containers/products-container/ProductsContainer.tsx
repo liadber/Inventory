@@ -16,30 +16,26 @@ export default function ProductsContainer() {
     });
     const currentProductType = useCurrentProductType();
 
-    function fetchData() {
-
-    }
-
     useEffect(() => {
-        const queryParams = {
-            sort: 'name:asc',
-            page: `${paginationModel.page}`,
-            filters: `${{}}`
-        };
+        if (currentProductType && currentProductType?.type && currentProductType?.type !== '') {
+            const queryParams = {
+                sort: 'name:asc',
+                page: `${paginationModel.page}`,
+                filters: `${{}}`
+            };
 
-        // Convert query parameters object to URL-encoded query string
-        const queryString = new URLSearchParams(queryParams).toString();
+            // Convert query parameters object to URL-encoded query string
+            const queryString = new URLSearchParams(queryParams).toString();
 
-        currentProductType?.type !== '' &&
-        axios.get(`/product/${currentProductType?.type}?${queryString}`)
-            .then(response => {
-                setProducts(response.data);
-                console.log("done");
-            })
-            .catch(error => {
-                console.error('Error fetching products:', error);
-            })
-    }, [currentProductType, paginationModel.page]);
+            axios.get(`/product/${currentProductType?.type}?${queryString}`)
+                .then(response => {
+                    setProducts(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                })
+        }
+    }, [currentProductType?.type, paginationModel.page]);
 
     return (
         <Table rows={products} columns={
@@ -53,8 +49,8 @@ export default function ProductsContainer() {
                     });
                 })
                 :
-                [{field: 'col2', headerName: 'Column 2', width: 150}]
-        } rowCount={currentProductType ? currentProductType?.quantity : 0}
+                []
+        } rowCount={(currentProductType && currentProductType?.type !== '') ? currentProductType?.quantity : 0}
                paginationModel={paginationModel}
                handlePaginationModelChange={setPaginationModel}></Table>
     );
