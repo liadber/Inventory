@@ -21,6 +21,7 @@ export function CurrentProductTypeContextProvider({children}: any) {
 function currentProductTypeReducer(currentType: string, action: { type: string, nextProductType: string }) {
     switch (action.type) {
         case 'changed': {
+            console.log(action.nextProductType);
             return action.nextProductType
         }
         default: {
@@ -29,7 +30,7 @@ function currentProductTypeReducer(currentType: string, action: { type: string, 
     }
 }
 
-const initialCurrentProductType = "Bike";
+const initialCurrentProductType = "";
 
 export function useCurrentProductType() {
     return useContext(CurrentProductTypeContext);
