@@ -1,7 +1,8 @@
 import Table from "../components/Table";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useCurrentProductStatistics} from "../context/CurrentProductStatisticsContextProvider";
+import {GridSortModel} from "@mui/x-data-grid";
 
 export interface PaginationModel {
     page: number,
@@ -14,12 +15,13 @@ export default function ProductsContainer() {
         page: 0,
         pageSize: 10,
     });
+    const [queryOptions, setQueryOptions] = useState<{ sortModel: GridSortModel }>();
     const currentProductType = useCurrentProductStatistics();
 
     useEffect(() => {
         if (currentProductType && currentProductType?.type && currentProductType?.type !== '') {
             const queryParams = {
-                sort: 'name:asc',
+                sort: queryOptions ? `${queryOptions.sortModel[0].field}:${queryOptions.sortModel[0].sort}` : 'name:asc',
                 page: `${paginationModel.page}`,
                 filters: `${{}}`
             };
@@ -35,7 +37,11 @@ export default function ProductsContainer() {
                     console.error('Error fetching products:', error);
                 })
         }
-    }, [currentProductType?.type, paginationModel.page]);
+    }, [currentProductType?.type, paginationModel.page, queryOptions]);
+
+    const handleSortModelChange: (sortModel: GridSortModel) => void = useCallback((sortModel: GridSortModel) => {
+        setQueryOptions({sortModel: [...sortModel]});
+    }, []);
 
     return (
         <Table rows={products} columns={
@@ -52,6 +58,8 @@ export default function ProductsContainer() {
                 []
         } rowCount={(currentProductType && currentProductType?.type !== '') ? currentProductType?.quantity : 0}
                paginationModel={paginationModel}
-               handlePaginationModelChange={setPaginationModel}></Table>
+               onPaginationModelChange={setPaginationModel}
+               onSortModelChange={handleSortModelChange}
+        ></Table>
     );
 }

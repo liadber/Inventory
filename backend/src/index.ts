@@ -40,7 +40,10 @@ app.get('/product/:type', async (req, res) => {
     // Add sorting logic
     if (sort) {
         // @ts-ignore
-        const [sortBy, sortOrder] = sort.split(':');
+        let [sortBy, sortOrder] = sort.split(':');
+        if (sortBy === 'id') {
+            sortBy = 'product.id';
+        }
         query += ` ORDER BY ${sortBy} ${sortOrder}`;
     }
 
@@ -55,7 +58,6 @@ app.get('/product/:type', async (req, res) => {
     if (filters) {
         // Implement filtering based on filters object
     }
-
     try {
         const {rows} = await pool.query(query);
         res.json(rows);

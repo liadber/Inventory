@@ -1,29 +1,35 @@
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridSortModel} from "@mui/x-data-grid";
 import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {PaginationModel} from "../containers/ProductsContainer";
 
 
-export default function Table(data: {rows: GridRowsProp, columns: GridColDef[], rowCount: number, paginationModel: PaginationModel, handlePaginationModelChange: (nextPaginationModel: PaginationModel) => void}){
-    const [rowCountState, setRowCountState] = useState(data.rowCount);
+export default function Table(props: { rows: GridRowsProp, columns: GridColDef[],
+    rowCount: number, paginationModel: PaginationModel, onPaginationModelChange: (nextPaginationModel: PaginationModel) => void,
+    onSortModelChange: (sortModel: GridSortModel) => void,
+}) {
+    const [rowCountState, setRowCountState] = useState(props.rowCount);
+
 
     //To avoid undefined during loading that causes reset the page to zero. T
     useEffect(() => {
         setRowCountState((prevRowCountState) =>
-            data.rowCount !== undefined ? data.rowCount : prevRowCountState,
+            props.rowCount !== undefined ? props.rowCount : prevRowCountState,
         );
-    }, [data.rowCount, setRowCountState]);
+    }, [props.rowCount, setRowCountState]);
 
 
     return (
-        <DataGrid rows={data.rows} columns={data.columns}
+        <DataGrid rows={props.rows} columns={props.columns}
                   paginationMode='server'
                   rowCount={rowCountState}
                   initialState={{
-                      pagination: {paginationModel: data.paginationModel},
+                      pagination: {paginationModel: props.paginationModel},
                   }}
-                  onPaginationModelChange={data.handlePaginationModelChange}
+                  onPaginationModelChange={props.onPaginationModelChange}
                   pageSizeOptions={[10]}
+                  sortingMode="server"
+                  onSortModelChange={props.onSortModelChange}
         />
     );
 }
