@@ -1,21 +1,21 @@
-import {useState} from "react";
 import Box from "@mui/material/Box";
 import {List, ListItemButton} from "@mui/material";
-import {useCurrentProductType} from "../context/CurrentProductTypeContext";
+import {useCurrentProductStatistics} from "../context/CurrentProductStatisticsContextProvider";
+import {ProductStatistics} from "../types/ProductStatistics";
 
 interface SelectableListProps {
-    listItems: { item: { type: string, quantity: number }, label: string }[],
-    onSelect?: (id: { type: string, quantity: number }) => void
+    listItems: { item: ProductStatistics, label: string }[],
+    onSelect?: (id: ProductStatistics) => void
 }
 
 export default function SelectableList(props: SelectableListProps) {
-    const currentProductType = useCurrentProductType();
+    const currentProductStatistics = useCurrentProductStatistics();
 
     const {listItems, onSelect} = props;
 
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: { type: string, quantity: number },
+        item: ProductStatistics,
     ) => {
         onSelect && onSelect(item);
     };
@@ -27,7 +27,7 @@ export default function SelectableList(props: SelectableListProps) {
                     listItems.map(({item, label}) =>
                         <ListItemButton
                             key={item.type}
-                            selected={item.type === currentProductType?.type}
+                            selected={item.type === currentProductStatistics?.type}
                             onClick={(event) => handleListItemClick(event, item)}
                             sx={{whiteSpace: 'nowrap'}}
                         >

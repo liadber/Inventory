@@ -2,10 +2,10 @@ import React from 'react';
 import "./App.scss";
 import Section from "./components/section/Section";
 import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
-import ProductsTypesContainer from "./containers/products-types-container/ProductsTypesContainer";
+import ProductsStatisticsContainer from "./containers/ProductsStatisticsContainer";
 import axios from 'axios';
-import ProductsContainer from "./containers/products-container/ProductsContainer";
-import {CurrentProductTypeContextProvider} from "./context/CurrentProductTypeContext";
+import ProductsContainer from "./containers/ProductsContainer";
+import {CurrentProductStatisticsContextProvider} from "./context/CurrentProductStatisticsContextProvider";
 
 function App() {
 
@@ -28,14 +28,14 @@ function App() {
 
     return (
         <>
-            <CurrentProductTypeContextProvider>
+            <CurrentProductStatisticsContextProvider>
                 <Section>
-                    <ProductsTypesContainer></ProductsTypesContainer>
+                    <ProductsStatisticsContainer></ProductsStatisticsContainer>
                 </Section>
                 <Section>
                     <ProductsContainer></ProductsContainer>
                 </Section>
-            </CurrentProductTypeContextProvider>
+            </CurrentProductStatisticsContextProvider>
         </>
     );
 }

@@ -1,7 +1,7 @@
-import Table from "../../components/Table";
+import Table from "../components/Table";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {useCurrentProductType} from "../../context/CurrentProductTypeContext";
+import {useCurrentProductStatistics} from "../context/CurrentProductStatisticsContextProvider";
 
 export interface PaginationModel {
     page: number,
@@ -14,7 +14,7 @@ export default function ProductsContainer() {
         page: 0,
         pageSize: 10,
     });
-    const currentProductType = useCurrentProductType();
+    const currentProductType = useCurrentProductStatistics();
 
     useEffect(() => {
         if (currentProductType && currentProductType?.type && currentProductType?.type !== '') {

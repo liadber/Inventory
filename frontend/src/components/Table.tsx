@@ -1,7 +1,7 @@
 import {DataGrid} from "@mui/x-data-grid";
 import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import {useEffect, useState} from "react";
-import {PaginationModel} from "../containers/products-container/ProductsContainer";
+import {PaginationModel} from "../containers/ProductsContainer";
 
 
 export default function Table(data: {rows: GridRowsProp, columns: GridColDef[], rowCount: number, paginationModel: PaginationModel, handlePaginationModelChange: (nextPaginationModel: PaginationModel) => void}){
