@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import Table from "../../components/table/Table";
+import {useCurrentProductType} from "../../context/CurrentProductTypeContext";
 
 
 export default function ProductsContainer({children = null}: any) {
     const [products, setProducts] = useState([]);
+    const currentProductType = useCurrentProductType();
 
     useEffect(() => {
 
@@ -18,15 +19,14 @@ export default function ProductsContainer({children = null}: any) {
         const queryString = new URLSearchParams(queryParams).toString();
 
 
-        axios.get(`/product/Bike?${queryString}`) // Todo: Change 'bike' to the desired product type
+        axios.get(`/product/${currentProductType}?${queryString}`)
             .then(response => {
                 setProducts(response.data);
             })
             .catch(error => {
                 console.error('Error fetching products:', error);
             });
-    }, []);
-
+    }, [currentProductType]);
 
     return (
         <>
