@@ -32,7 +32,7 @@ function App() {
                 <Section>
                     <ProductsTypesContainer></ProductsTypesContainer>
                 </Section>
-                <Section bigger={true}>
+                <Section>
                     <ProductsContainer></ProductsContainer>
                 </Section>
             </CurrentProductTypeContextProvider>

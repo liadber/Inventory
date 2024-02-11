@@ -1,8 +1,8 @@
 import {Paper} from "@mui/material";
 import "./Section.scss"
 
-export default function Section({bigger= false, children = null}: any) {
+export default function Section({children = null}: any) {
     return (
-        <Paper elevation={3} className={'section'+(bigger? ' bigger': '')}>{children}</Paper>
+        <Paper sx={{overflowX: "scroll" }} elevation={3} className='section'>{children}</Paper>
     );
 }

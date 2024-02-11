@@ -48,7 +48,6 @@ export default function ProductsContainer() {
                     return ({
                         field: colName,
                         headerName: colName,
-                        minWidth: 150,
                         type: "singleSelect",
                         valueOptions: ['United Kingdom', 'Spain', 'Brazil']
                     });
