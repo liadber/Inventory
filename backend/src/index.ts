@@ -29,7 +29,7 @@ app.get('/products/statistics', async (req, res) => {
 });
 
 // List products by type
-app.get('/product/:type', async (req, res) => {
+app.get('/product/list/:type', async (req, res) => {
     const {type} = req.params;
     const {sort, page, filters} = req.query;
 
@@ -37,7 +37,6 @@ app.get('/product/:type', async (req, res) => {
     let query = `SELECT * FROM product JOIN ${type} ON product.id = ${type}.id`;
     // Add filtering logic
     if (filters) {
-        console.log(filters);
         const filterObj = JSON.parse(filters.toString()); // Parse the filters object
         const filterConditions = Object.entries(filterObj)
             .map(([key, value]) => {
@@ -77,10 +76,29 @@ app.get('/product/:type', async (req, res) => {
 });
 
 // List product type filter values
-app.get('/product/filter-values', async (req, res) => {
+app.get('/product/filter-values/:type', async (req, res) => {
     try {
-        // Implement logic to get unique values for each product type and field
-        res.json({});
+        const {type} = req.params;
+        let query = `SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '${type.toLowerCase()}'`;
+        console.log(query);
+        let {rows} = await pool.query(query);
+        rows = [
+            ...rows, ...(['price', 'description', 'name'].map((colName) => {
+                return {column_name: colName};
+            }))
+        ];
+        let arr = [];
+        for (let row of rows) {
+            query = `SELECT DISTINCT array_agg(${row.column_name}) as ${row.column_name} FROM public.${type} JOIN public.product`;
+            query = `SELECT DISTINCT array_agg(${row.column_name}) as ${row.column_name}
+            FROM (
+                SELECT ${row.column_name==='id'? `public.${type}.${row.column_name} `:`${row.column_name} `}
+                FROM public.${type} 
+                JOIN public.product ON public.${type}.id = public.product.id
+            ) AS subquery`;
+            arr.push((await pool.query(query)).rows[0]);
+        }
+        res.json(arr);
     } catch (error) {
         console.error('Error executing query', error);
         res.status(500).json({error: 'Internal server error'});

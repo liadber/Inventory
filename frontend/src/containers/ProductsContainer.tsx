@@ -52,7 +52,7 @@ export default function ProductsContainer() {
                 filters: filters
             } : queryParams).toString();
 
-            axios.get(`/product/${currentProductType?.type}?${queryString}`)
+            axios.get(`/product/list/${currentProductType?.type}?${queryString}`)
                 .then(response => {
                     setProducts(response.data);
                 })
