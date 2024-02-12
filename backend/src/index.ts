@@ -40,7 +40,6 @@ app.get('/product/list/:type', async (req, res) => {
         const filterObj = JSON.parse(filters.toString()); // Parse the filters object
         const filterConditions = Object.entries(filterObj)
             .map(([key, value]) => {
-                console.log(value);
                 const valuesString = Array.isArray(value) ? value.map(v => `'${v}'`).join(', ') : `'${value}'`;
                 return `${key} IN (${valuesString})`;
             })
@@ -80,25 +79,23 @@ app.get('/product/filter-values/:type', async (req, res) => {
     try {
         const {type} = req.params;
         let query = `SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '${type.toLowerCase()}'`;
-        console.log(query);
         let {rows} = await pool.query(query);
         rows = [
             ...rows, ...(['price', 'description', 'name'].map((colName) => {
                 return {column_name: colName};
             }))
         ];
-        let arr = [];
+        let ans = {};
         for (let row of rows) {
-            query = `SELECT DISTINCT array_agg(${row.column_name}) as ${row.column_name} FROM public.${type} JOIN public.product`;
-            query = `SELECT DISTINCT array_agg(${row.column_name}) as ${row.column_name}
+            query = `SELECT DISTINCT array_agg(${row.column_name}) as ans
             FROM (
                 SELECT ${row.column_name==='id'? `public.${type}.${row.column_name} `:`${row.column_name} `}
                 FROM public.${type} 
                 JOIN public.product ON public.${type}.id = public.product.id
             ) AS subquery`;
-            arr.push((await pool.query(query)).rows[0]);
+            ans = {...ans, [row.column_name]: (await pool.query(query)).rows[0].ans};
         }
-        res.json(arr);
+        res.json(ans);
     } catch (error) {
         console.error('Error executing query', error);
         res.status(500).json({error: 'Internal server error'});
