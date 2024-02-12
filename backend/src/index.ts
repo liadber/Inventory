@@ -35,6 +35,19 @@ app.get('/product/:type', async (req, res) => {
 
     // Construct SQL query based on parameters
     let query = `SELECT * FROM product JOIN ${type} ON product.id = ${type}.id`;
+    // Add filtering logic
+    if (filters) {
+        console.log(filters);
+        const filterObj = JSON.parse(filters.toString()); // Parse the filters object
+        const filterConditions = Object.entries(filterObj)
+            .map(([key, value]) => {
+                console.log(value);
+                const valuesString = Array.isArray(value) ? value.map(v => `'${v}'`).join(', ') : `'${value}'`;
+                return `${key} IN (${valuesString})`;
+            })
+            .join(' AND '); // Join conditions with AND operator
+        query += ` WHERE ${filterConditions}`;
+    }
 
 
     // Add sorting logic
@@ -54,10 +67,6 @@ app.get('/product/:type', async (req, res) => {
         query += ` OFFSET ${offset} LIMIT 10`;
     }
 
-    // Add filtering logic
-    if (filters) {
-        // Implement filtering based on filters object
-    }
     try {
         const {rows} = await pool.query(query);
         res.json(rows);

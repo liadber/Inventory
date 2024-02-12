@@ -1,12 +1,12 @@
-import {DataGrid, GridSortModel} from "@mui/x-data-grid";
-import {GridColDef, GridRowsProp} from "@mui/x-data-grid";
-import {useCallback, useEffect, useState} from "react";
+import {DataGrid, GridColDef, GridFilterModel, GridRowsProp, GridSortModel} from "@mui/x-data-grid";
+import {useEffect, useState} from "react";
 import {PaginationModel} from "../containers/ProductsContainer";
 
 
 export default function Table(props: { rows: GridRowsProp, columns: GridColDef[],
     rowCount: number, paginationModel: PaginationModel, onPaginationModelChange: (nextPaginationModel: PaginationModel) => void,
     onSortModelChange: (sortModel: GridSortModel) => void,
+    onFilterModelChange: (filterModel: GridFilterModel) => void
 }) {
     const [rowCountState, setRowCountState] = useState(props.rowCount);
 
@@ -30,6 +30,8 @@ export default function Table(props: { rows: GridRowsProp, columns: GridColDef[]
                   pageSizeOptions={[10]}
                   sortingMode="server"
                   onSortModelChange={props.onSortModelChange}
+                  filterMode="server"
+                  onFilterModelChange={props.onFilterModelChange}
         />
     );
 }

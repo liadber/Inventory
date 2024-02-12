@@ -2,7 +2,7 @@ import Table from "../components/Table";
 import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useCurrentProductStatistics} from "../context/CurrentProductStatisticsContextProvider";
-import {GridSortModel} from "@mui/x-data-grid";
+import {GridFilterModel, GridSortModel} from "@mui/x-data-grid";
 
 export interface PaginationModel {
     page: number,
@@ -15,19 +15,42 @@ export default function ProductsContainer() {
         page: 0,
         pageSize: 10,
     });
-    const [queryOptions, setQueryOptions] = useState<{ sortModel: GridSortModel }>();
+    const [queryOptions, setQueryOptions] = useState<{
+        sortModel: GridSortModel,
+        filterModel: GridFilterModel
+    }>({sortModel: [], filterModel: {items: []}});
     const currentProductType = useCurrentProductStatistics();
+
+
+    const handleSortModelChange: (sortModel: GridSortModel) => void = useCallback((sortModel: GridSortModel) => {
+        setQueryOptions({...queryOptions, sortModel: [...sortModel]});
+    }, []);
 
     useEffect(() => {
         if (currentProductType && currentProductType?.type && currentProductType?.type !== '') {
             const queryParams = {
-                sort: queryOptions ? `${queryOptions.sortModel[0].field}:${queryOptions.sortModel[0].sort}` : 'name:asc',
-                page: `${paginationModel.page}`,
-                filters: `${{}}`
+                sort: queryOptions && queryOptions.sortModel[0] ? `${queryOptions.sortModel[0].field}:${queryOptions.sortModel[0].sort}` : 'name:asc',
+                page: `${paginationModel.page}`
             };
 
+            let filters = '';
+            //adding filters
+            if ((queryOptions.filterModel.items.length > 0)) {
+                const actualFilters = queryOptions.filterModel.items
+                    .filter((item) => item?.value !== undefined && item?.value?.length !== 0);
+                if (actualFilters.length > 0) {
+                    filters = `{${actualFilters.map(item =>
+                        `"${item.field}":[
+                        ${(item?.value?.length > 0) ?
+                            item?.value?.map((v: any) => `"${v.toString()}"`).join(",")
+                            : `"${item?.value}"`}]`).join(', ')}}`
+                }
+            }
             // Convert query parameters object to URL-encoded query string
-            const queryString = new URLSearchParams(queryParams).toString();
+            const queryString = new URLSearchParams(filters !== '' ? {
+                ...queryParams,
+                filters: filters
+            } : queryParams).toString();
 
             axios.get(`/product/${currentProductType?.type}?${queryString}`)
                 .then(response => {
@@ -37,12 +60,17 @@ export default function ProductsContainer() {
                     console.error('Error fetching products:', error);
                 })
         }
-    }, [currentProductType?.type, paginationModel.page, queryOptions]);
+    }, [
+        currentProductType?.type,
+        paginationModel.page,
+        queryOptions.sortModel,
+        queryOptions.filterModel.items[0]?.value
+    ]);
 
-    const handleSortModelChange: (sortModel: GridSortModel) => void = useCallback((sortModel: GridSortModel) => {
-        setQueryOptions({sortModel: [...sortModel]});
+    const handleFilterModelChange = React.useCallback((filterModel: GridFilterModel) => {
+        // Here you save the data you need from the filter model
+        setQueryOptions({...queryOptions, filterModel: {...filterModel}});
     }, []);
-
     return (
         <Table rows={products} columns={
             products.length > 0 ?
@@ -51,7 +79,7 @@ export default function ProductsContainer() {
                         field: colName,
                         headerName: colName,
                         type: "singleSelect",
-                        valueOptions: ['United Kingdom', 'Spain', 'Brazil']
+                        valueOptions: ['Black', 'Silver', 'Brazil'],
                     });
                 })
                 :
@@ -60,6 +88,7 @@ export default function ProductsContainer() {
                paginationModel={paginationModel}
                onPaginationModelChange={setPaginationModel}
                onSortModelChange={handleSortModelChange}
+               onFilterModelChange={handleFilterModelChange}
         ></Table>
     );
 }
