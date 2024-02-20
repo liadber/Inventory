@@ -1,13 +1,18 @@
 import {createContext, Dispatch, useContext, useReducer} from 'react';
 import {ProductStatistics} from "../types/ProductStatistics";
 
-export const CurrentProductStatisticsContext= createContext<ProductStatistics | null>(null);
+export const CurrentProductStatisticsContext = createContext<ProductStatistics>({type: '', quantity: 0});
 export const CurrentProductStatisticsDispatchContext = createContext<Dispatch<any> | null>(null);
+
+interface ProductStatisticsAction {
+    type: string,
+    nextProductStatistics: ProductStatistics
+}
 
 export function CurrentProductStatisticsContextProvider({children}: any) {
     const [currentProductType, dispatch] = useReducer(
         currentProductTypeReducer,
-        initialCurrentProductType
+        initialCurrentProductType,
     );
 
     return (
@@ -19,7 +24,7 @@ export function CurrentProductStatisticsContextProvider({children}: any) {
     );
 }
 
-function currentProductTypeReducer(currentProductStatistics: ProductStatistics, action: { type: string, nextProductStatistics: ProductStatistics }) {
+function currentProductTypeReducer(currentProductStatistics: ProductStatistics, action: ProductStatisticsAction) {
     switch (action.type) {
         case 'changed': {
             return {...action.nextProductStatistics}

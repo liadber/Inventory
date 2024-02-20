@@ -98,7 +98,7 @@ export default function ProductsContainer() {
                 })
                 :
                 []
-        } rowCount={(currentProductType && currentProductType?.type !== '') ? currentProductType?.quantity : 0}
+        } rowCount={(currentProductType && currentProductType?.type !== '') ? currentProductType.quantity : 0}
                paginationModel={paginationModel}
                onPaginationModelChange={setPaginationModel}
                onSortModelChange={handleSortModelChange}
