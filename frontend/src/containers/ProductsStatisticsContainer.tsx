@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from "react";
 import SelectableList from "../components/SelectableList";
 import axios from 'axios';
-import {useCurrentProductStatisticsDispatch} from "../context/CurrentProductStatisticsContextProvider";
+import {
+    useCurrentProductStatistics,
+    useCurrentProductStatisticsDispatch
+} from "../context/CurrentProductStatisticsContextProvider";
 import {ProductStatistics} from "../types/ProductStatistics";
 
 export default function ProductsStatisticsContainer() {
     const [productsStatisticsArray, setProductsStatisticsArray] = useState<ProductStatistics[]>([]);
     const dispatch = useCurrentProductStatisticsDispatch();
+    const currentProductStatistics = useCurrentProductStatistics();
 
     useEffect(() => {
         // Fetch product statistics
@@ -24,14 +28,23 @@ export default function ProductsStatisticsContainer() {
             });
     }, [dispatch]);
 
-    function handleSelect(nextProductStatistics: ProductStatistics) {
-        dispatch && dispatch({type: 'changed', nextProductStatistics});
+    function handleSelect(nextProductStatisticsKey: string) {
+        dispatch && dispatch({
+            type: 'changed',
+            nextProductStatistics:
+                productsStatisticsArray.find((productsStatistics) =>
+                    productsStatistics.type === nextProductStatisticsKey)
+        });
     }
 
     return (
         <SelectableList onSelect={handleSelect}
+                        currentItemKey={currentProductStatistics?.type || ''}
                         listItems={productsStatisticsArray.map((productStatistics: ProductStatistics) => {
-                            return {item: productStatistics, label: `${productStatistics.type} (${productStatistics.quantity})`};
+                            return {
+                                key: productStatistics.type,
+                                label: `${productStatistics.type} (${productStatistics.quantity})`
+                            };
                         })}></SelectableList>
     );
 }
