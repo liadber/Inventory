@@ -87,11 +87,13 @@ app.get('/product/filter-values/:type', async (req, res) => {
         ];
         let ans = {};
         for (let row of rows) {
-            query = `SELECT DISTINCT array_agg(${row.column_name}) as ans
+            const columnNameString = row.column_name==='id'? `public.${type}.${row.column_name}`:`${row.column_name}`;
+            query = `SELECT array_agg(${row.column_name}) as ans
             FROM (
-                SELECT ${row.column_name==='id'? `public.${type}.${row.column_name} `:`${row.column_name} `}
+                SELECT DISTINCT ${columnNameString}
                 FROM public.${type} 
                 JOIN public.product ON public.${type}.id = public.product.id
+                ORDER BY ${columnNameString}
             ) AS subquery`;
             ans = {...ans, [row.column_name]: (await pool.query(query)).rows[0].ans};
         }
