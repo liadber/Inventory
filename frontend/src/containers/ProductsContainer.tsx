@@ -41,9 +41,9 @@ export default function ProductsContainer() {
                 if (actualFilters.length > 0) {
                     filters = `{${actualFilters.map(item =>
                         `"${item.field}":[
-                        ${(item?.value?.length > 0) ?
+                        ${(typeof item?.value === "string") ? `"${item?.value}"` :
                             item?.value?.map((v: any) => `"${v.toString()}"`).join(",")
-                            : `"${item?.value}"`}]`).join(', ')}}`
+                        }]`).join(', ')}}`
                 }
             }
             // Convert query parameters object to URL-encoded query string
