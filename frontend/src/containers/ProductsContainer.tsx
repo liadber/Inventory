@@ -1,5 +1,5 @@
 import Table from "../components/Table";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useCurrentProductStatistics} from "../context/CurrentProductStatisticsContextProvider";
 import {GridFilterModel, GridSortModel} from "@mui/x-data-grid";
@@ -22,9 +22,9 @@ export default function ProductsContainer() {
     }>({sortModel: [], filterModel: {items: []}});
     const currentProductType = useCurrentProductStatistics();
 
-    const handleSortModelChange: (sortModel: GridSortModel) => void = useCallback((sortModel: GridSortModel) => {
+    function handleSortModelChange(sortModel: GridSortModel) {
         setQueryOptions({...queryOptions, sortModel: [...sortModel]});
-    }, []);
+    }
 
     useEffect(() => {
         if (currentProductType && currentProductType?.type && currentProductType?.type !== '') {
@@ -61,7 +61,7 @@ export default function ProductsContainer() {
                 })
         }
     }, [
-        currentProductType?.type,
+        currentProductType ? currentProductType.type : '',
         paginationModel.page,
         queryOptions.sortModel,
         queryOptions.filterModel.items[0]?.value
@@ -79,10 +79,11 @@ export default function ProductsContainer() {
         }
     }, [currentProductType?.type]);
 
-    const handleFilterModelChange = React.useCallback((filterModel: GridFilterModel) => {
+    function handleFilterModelChange(filterModel: GridFilterModel) {
         // Here you save the data you need from the filter model
         setQueryOptions({...queryOptions, filterModel: {...filterModel}});
-    }, []);
+    }
+
     return (
         <Table rows={products} columns={
             products.length > 0 ?
@@ -91,7 +92,6 @@ export default function ProductsContainer() {
                         field: colName,
                         headerName: colName,
                         type: "singleSelect",
-                        // valueOptions: ['Black', 'Silver', 'Brazil'],
                         valueOptions: valuesDictionary ? valuesDictionary[colName] : []
 
                     });
