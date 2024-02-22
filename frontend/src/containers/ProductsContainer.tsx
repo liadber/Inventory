@@ -83,7 +83,6 @@ export default function ProductsContainer() {
         // Here you save the data you need from the filter model
         setQueryOptions({...queryOptions, filterModel: {...filterModel}});
     }
-
     return (
         <Table rows={products} columns={
             products.length > 0 ?
@@ -92,8 +91,8 @@ export default function ProductsContainer() {
                         field: colName,
                         headerName: colName,
                         type: "singleSelect",
-                        valueOptions: valuesDictionary ? valuesDictionary[colName] : []
-
+                        valueOptions: valuesDictionary ? valuesDictionary[colName] : [],
+                        renderCell: (params) => colName==="color"? <strong>{params.value}</strong>: params.value,
                     });
                 })
                 :
