@@ -21,5 +21,4 @@ This project is a full-stack web application designed to manage the inventory of
   - Backend: Node.js.
   - Database: PostgreSQL.
 
-## How to Get Started:
-To set up and deploy the project locally. Contributions and feedback are welcome to further enhance the functionality and usability of the system.
+Contributions and feedback are welcome to further enhance the functionality and usability of the system.
